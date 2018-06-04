@@ -18,16 +18,11 @@ class App extends Component {
     }
 
     componentDidMount() {
-        this.fetchUrl('./samples/my.json', data => this.setState({userInfo: data}));
-        this.fetchUrl('./samples/banners.json', data => this.setState({banners: data}));
-        this.fetchUrl('./samples/teams.json', data => this.setState({teams: data}));
-        this.fetchUrl('./samples/schedules.json', data => this.setState({schedules: data}));
-        this.fetchUrl('./samples/users.json', data => this.setState({users: data}));
-        this.fetchUrl('./samples/ranks.json', data => this.setState({ranks: data}));
+        this.fetchAll();
     }
 
     render() {
-        const {banners, userInfo, schedules, teams, ranks, users} = this.state;
+        const { banners, userInfo, schedules, teams, ranks, users } = this.state;
 
         return (
             <div className="App">
@@ -63,12 +58,19 @@ class App extends Component {
         return rank.map(element => usersMap[element]);
     }
 
-    fetchUrl = (url, cb) => {
-        axios.get(url).then(resp => {
-            cb(resp.data);
-        }, error => {
-            console.error(`fetching ${url} failed: ` + error);
-        });
+    fetchAll = async () => {
+        try {
+            const { data: userInfo } = await axios.get('./samples/my.json');
+            const { data: banners } = await axios.get('./samples/banners.json');
+            const { data: teams } = await axios.get('./samples/teams.json');
+            const { data: schedules } = await axios.get('./samples/schedules.json');
+            const { data: users } = await axios.get('./samples/users.json');
+            const { data: ranks } = await axios.get('./samples/ranks.json');
+
+            this.setState({userInfo, banners, teams, schedules, users, ranks});
+        } catch (e) {
+            console.error('Fetching all failed: ' + e)
+        }
     }
 }
 
