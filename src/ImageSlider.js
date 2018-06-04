@@ -47,6 +47,8 @@ class ImageSlider extends Component {
     }
 
     goToNextSlide = () => {
+        if (this.props.images.length === 0) return;
+        
         this.setState((prevState, props) => {
             return {
                 index: prevState.index + 1,
