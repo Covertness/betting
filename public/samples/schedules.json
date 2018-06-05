@@ -1,0 +1,80 @@
+[
+    {
+        "id": 0,
+        "homeTeamId": 0,
+        "awayTeamId": 1,
+        "odds": [
+            1.88,
+            2.35,
+            2.23
+        ],
+        "time": "2018-06-04T12:19:24.298Z",
+        "group": "A",
+        "groupTabIndex": 0,
+        "disableBetting": true
+    },
+    {
+        "id": 1,
+        "homeTeamId": 0,
+        "awayTeamId": 1,
+        "odds": [
+            1.88,
+            2.35,
+            2.23
+        ],
+        "time": "2018-06-04T12:19:24.298Z",
+        "group": "A",
+        "groupTabIndex": 0
+    },
+    {
+        "id": 2,
+        "homeTeamId": 0,
+        "awayTeamId": 1,
+        "odds": [
+            1.88,
+            2.35,
+            2.23
+        ],
+        "time": "2018-06-04T12:19:24.298Z",
+        "group": "A",
+        "groupTabIndex": 0,
+        "enableBetting": true
+    },
+    {
+        "id": 3,
+        "homeTeamId": 0,
+        "awayTeamId": 1,
+        "odds": [
+            1.88,
+            2.35,
+            2.23
+        ],
+        "time": "2018-06-04T12:19:24.298Z",
+        "groupTabIndex": 1,
+        "enableBetting": true
+    },
+    {
+        "id": 4,
+        "homeTeamId": 0,
+        "awayTeamId": 1,
+        "odds": [
+            1.88,
+            2.35,
+            2.23
+        ],
+        "time": "2018-06-04T12:19:24.298Z",
+        "groupTabIndex": 1
+    },
+    {
+        "id": 5,
+        "homeTeamId": 0,
+        "awayTeamId": 1,
+        "odds": [
+            1.88,
+            2.35,
+            2.23
+        ],
+        "time": "2018-06-04T12:19:24.298Z",
+        "groupTabIndex": 2
+    }
+]
