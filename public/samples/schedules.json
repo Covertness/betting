@@ -11,7 +11,8 @@
         "time": "2018-06-04T12:19:24.298Z",
         "group": "A",
         "groupTabIndex": 0,
-        "disableBetting": true
+        "disableBetting": true,
+        "result": 1
     },
     {
         "id": 1,
@@ -24,7 +25,8 @@
         ],
         "time": "2018-06-04T12:19:24.298Z",
         "group": "A",
-        "groupTabIndex": 0
+        "groupTabIndex": 0,
+        "result": 0
     },
     {
         "id": 2,
@@ -38,7 +40,8 @@
         "time": "2018-06-04T12:19:24.298Z",
         "group": "A",
         "groupTabIndex": 0,
-        "enableBetting": true
+        "enableBetting": true,
+        "result": 0
     },
     {
         "id": 3,
@@ -51,7 +54,8 @@
         ],
         "time": "2018-06-04T12:19:24.298Z",
         "groupTabIndex": 1,
-        "enableBetting": true
+        "enableBetting": true,
+        "result": 0
     },
     {
         "id": 4,
@@ -63,7 +67,8 @@
             2.23
         ],
         "time": "2018-06-04T12:19:24.298Z",
-        "groupTabIndex": 1
+        "groupTabIndex": 1,
+        "result": 0
     },
     {
         "id": 5,
@@ -75,6 +80,7 @@
             2.23
         ],
         "time": "2018-06-04T12:19:24.298Z",
-        "groupTabIndex": 2
+        "groupTabIndex": 2,
+        "result": 0
     }
 ]
