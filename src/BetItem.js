@@ -4,7 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import ListItemText from '@material-ui/core/ListItemText';
 import Button from '@material-ui/core/Button';
-import NativeSelect from '@material-ui/core/NativeSelect';
+import TextField from '@material-ui/core/TextField';
 import moment from 'moment';
 
 const styles = {
@@ -50,7 +50,8 @@ const styles = {
     rewardInfo: {
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        fontSize: 10
     },
     moneyIcon: {
         width: 10,
@@ -69,7 +70,6 @@ class BetItem extends React.Component {
         if (this.props.showBettingLayout) {
             this.state = {
                 betNums: this.calcBetNums(this.props.userInfo.money),
-                currentBetIndex: 0,
                 currentOddsIndex: 0
             }
         }
@@ -84,7 +84,8 @@ class BetItem extends React.Component {
     }
 
     handleBetNumChange = event => {
-        this.setState({ [event.target.name]: event.target.value });
+        let count = event.target.value;
+        this.setState({ money: count });
     }
 
     render() {
@@ -138,7 +139,7 @@ class BetItem extends React.Component {
     renderBettingLayout = () => {
         const { classes, schedule } = this.props;
         const { odds } = schedule;
-        const { betNums, currentBetIndex, currentOddsIndex } = this.state;
+        const { betNums, money, currentOddsIndex } = this.state;
 
         const betNumMenus = betNums.map((betNum, index) => {
             return (
@@ -149,26 +150,26 @@ class BetItem extends React.Component {
         return (
             <div>
                 <div className={classes.betInfo}>
-                    <Button className={classes.teamChooser} variant="raised" color={currentOddsIndex === 0 ? "secondary" : "default"} onClick={this.handleBetHome}>
+                    <Button className={classes.teamChooser} size="small" variant="raised" color={currentOddsIndex === 0 ? "secondary" : "default"} onClick={this.handleBetHome}>
                         主胜（{odds[0]}）
                     </Button>
-                    <Button className={classes.teamChooser} variant="raised" color={currentOddsIndex === 2 ? "secondary" : "default"} onClick={this.handleBetAway}>
+                    <Button className={classes.teamChooser} size="small" variant="raised" color={currentOddsIndex === 2 ? "secondary" : "default"} onClick={this.handleBetAway}>
                         客胜（{odds[2]}）
                     </Button>
                 </div>
                 <div className={classes.rewardInfo}>
                     <img className={classes.moneyIcon} src="img/money.png" alt="money" />
-                    <label>{'猜对可赢 '}<b style={{ color: 'red' }}>{betNums[currentBetIndex] * odds[currentOddsIndex]}</b>{' 金币'}</label>
+                    <label>{'猜对可赢 '}<b style={{ color: 'red' }}>{(money || 0) * odds[currentOddsIndex]}</b>{' 金币'}</label>
                 </div>
                 <div className={classes.bet}>
-                    <NativeSelect
-                        value={currentBetIndex}
+                    <TextField
+                        label="下注金额"
+                        placeholder="1000"
+                        type="number"
+                        ref={money}
                         onChange={this.handleBetNumChange}
-                        name="currentBetIndex"
-                    >
-                        {betNumMenus}
-                    </NativeSelect>
-                    <Button variant="raised" color="primary">投注</Button>
+                    />
+                    <Button size="small" variant="raised" color="primary">投注</Button>
                 </div>
             </div>
         );
