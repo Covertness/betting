@@ -161,6 +161,7 @@ class BetItem extends React.Component {
                     <TextField
                         label="下注金额"
                         placeholder="1000"
+                        type="number"
                         value={money}
                         onChange={this.handleBetNumChange}
                     />

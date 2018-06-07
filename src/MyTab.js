@@ -37,7 +37,7 @@ const styles = {
         marginRight: 5
     },
     number: {
-        width: 30
+        width: 20
     },
     money: {
         width: 60
@@ -85,7 +85,6 @@ class MyTab extends React.Component {
                             客胜（{betting.schedule.odds[1]}）
                     </Button>
                     </div>
-                    <label className={win ? classes.winLabel : ''}>{notFinish ? '' : (win ? '赢' : '输')}</label>
                     <label className={win ? classNames(classes.winLabel, classes.money) : classes.money}>{notFinish ? '' : (win ? ('+' + betting.money * betting.odds + '币') : '-' + betting.money + '币')}</label>
                 </ListItem>
             )
