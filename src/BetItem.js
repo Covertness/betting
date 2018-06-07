@@ -69,7 +69,7 @@ class BetItem extends React.Component {
 
         if (this.props.showBettingLayout) {
             this.state = {
-                betNums: this.calcBetNums(this.props.userInfo.money),
+                money: '',
                 currentOddsIndex: 0
             }
         }
@@ -80,12 +80,14 @@ class BetItem extends React.Component {
     }
 
     handleBetAway = event => {
-        this.setState({ currentOddsIndex: 2 });
+        this.setState({ currentOddsIndex: 1 });
     }
 
     handleBetNumChange = event => {
         let count = event.target.value;
-        this.setState({ money: count });
+        if (/^(\d+)?$/.test(count)) {
+            this.setState({ money: count });
+        }
     }
 
     render() {
@@ -139,13 +141,7 @@ class BetItem extends React.Component {
     renderBettingLayout = () => {
         const { classes, schedule } = this.props;
         const { odds } = schedule;
-        const { betNums, money, currentOddsIndex } = this.state;
-
-        const betNumMenus = betNums.map((betNum, index) => {
-            return (
-                <option key={index} value={index}>{betNum}</option>
-            )
-        });
+        const { money, currentOddsIndex } = this.state;
 
         return (
             <div>
@@ -153,8 +149,8 @@ class BetItem extends React.Component {
                     <Button className={classes.teamChooser} size="small" variant="raised" color={currentOddsIndex === 0 ? "secondary" : "default"} onClick={this.handleBetHome}>
                         主胜（{odds[0]}）
                     </Button>
-                    <Button className={classes.teamChooser} size="small" variant="raised" color={currentOddsIndex === 2 ? "secondary" : "default"} onClick={this.handleBetAway}>
-                        客胜（{odds[2]}）
+                    <Button className={classes.teamChooser} size="small" variant="raised" color={currentOddsIndex === 1 ? "secondary" : "default"} onClick={this.handleBetAway}>
+                        客胜（{odds[1]}）
                     </Button>
                 </div>
                 <div className={classes.rewardInfo}>
@@ -165,8 +161,7 @@ class BetItem extends React.Component {
                     <TextField
                         label="下注金额"
                         placeholder="1000"
-                        type="number"
-                        ref={money}
+                        value={money}
                         onChange={this.handleBetNumChange}
                     />
                     <Button size="small" variant="raised" color="primary">投注</Button>

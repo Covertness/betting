@@ -60,7 +60,7 @@ class MainTabs extends React.Component {
     }
 
     render() {
-        const { classes, theme, schedules, ranks, userInfo } = this.props;
+        const { classes, theme, schedules, ranks, userInfo, history } = this.props;
 
         return (
             <div className={classes.root}>
@@ -74,7 +74,7 @@ class MainTabs extends React.Component {
                     <TabContainer dir={theme.direction}><ScheduleTab label="赛程" schedules={schedules} onChangeIndex={this.handleSubTabChange} /></TabContainer>
                     <TabContainer dir={theme.direction}><BetTab label="投注" schedules={schedules} userInfo={userInfo} onChangeIndex={this.handleSubTabChange} /></TabContainer>
                     <TabContainer dir={theme.direction}><RankTab label="排名" ranks={ranks} userInfo={userInfo} /></TabContainer>
-                    <TabContainer dir={theme.direction}><MyTab label="投注记录" /></TabContainer>
+                    <TabContainer dir={theme.direction}><MyTab label="投注记录" history={history} /></TabContainer>
                 </SwipeableViews>
                 <AppBar position="static" color="default" className={classes.tabLabels}>
                     <Tabs

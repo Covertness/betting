@@ -13,7 +13,11 @@ class App extends Component {
             teams: [],
             schedules: [],
             users: [],
-            ranks: []
+            ranks: [],
+            history: {
+                betting: [],
+                checkin: []
+            }
         };
     }
 
@@ -22,16 +26,19 @@ class App extends Component {
     }
 
     render() {
-        const { banners, userInfo, schedules, teams, ranks, users } = this.state;
+        const { banners, userInfo, schedules, teams, ranks, users, history } = this.state;
+
+        const expandedSchedules = this.expandSchedule(schedules, teams);
 
         return (
             <div className="App">
                 <ImageSlider images={banners} />
                 <MyBar userInfo={userInfo} />
                 <MainTabs
-                    schedules={this.expandSchedule(schedules, teams)}
+                    schedules={expandedSchedules}
                     ranks={this.expandRank(ranks, users)}
                     userInfo={userInfo}
+                    history={this.expandHistory(history, expandedSchedules)}
                 />
             </div>
         );
@@ -58,6 +65,18 @@ class App extends Component {
         return rank.map(element => usersMap[element]);
     }
 
+    expandHistory = (history, schedule) => {
+        const scheduleMap = {};
+        schedule.forEach(element => {
+            scheduleMap[element.id] = element;
+        });
+
+        history.betting = history.betting.map(element => Object.assign(element, {
+            schedule: scheduleMap[element.scheduleId]
+        }));
+        return history;
+    }
+
     fetchAll = async () => {
         try {
             const { data: userInfo } = await axios.get('./samples/my.json');
@@ -66,8 +85,9 @@ class App extends Component {
             const { data: schedules } = await axios.get('./samples/schedules.json');
             const { data: users } = await axios.get('./samples/users.json');
             const { data: ranks } = await axios.get('./samples/ranks.json');
+            const { data: history } = await axios.get('./samples/history.json');
 
-            this.setState({userInfo, banners, teams, schedules, users, ranks});
+            this.setState({userInfo, banners, teams, schedules, users, ranks, history});
         } catch (e) {
             console.error('Fetching all failed: ' + e)
         }
