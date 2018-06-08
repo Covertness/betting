@@ -1,4 +1,10 @@
 import React, { Component } from 'react';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Button from '@material-ui/core/Button';
 import axios from 'axios';
 import ImageSlider from './ImageSlider';
 import MyBar from './MyBar';
@@ -8,7 +14,9 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            userInfo: {},
+            userInfo: {
+                checkin: false
+            },
             banners: [],
             teams: [],
             schedules: [],
@@ -17,7 +25,9 @@ class App extends Component {
             history: {
                 betting: [],
                 checkin: []
-            }
+            },
+            showBettingResult: false,
+            bettingResult: ''
         };
     }
 
@@ -25,21 +35,81 @@ class App extends Component {
         this.fetchAll();
     }
 
+    handleCheckinClose = () => {
+        this.setState((prevState, _props) => ({
+            userInfo: Object.assign(prevState.userInfo, {
+                checkin: false
+            })
+        }));
+    };
+
+    handleBettingResult = (result) => {
+        const code = result.code;
+
+        let bettingResult = '';
+        if (code === 0) {
+            bettingResult = '恭喜投注成功！'
+
+            this.fetchLatest().catch(error => {
+                console.error('Fetching latest failed: ' + error)
+            });
+        } else {
+            bettingResult = '投注失败：' + result.message
+        }
+
+        this.setState({ showBettingResult: true, bettingResult });
+    }
+
+    handleBettingResultClose = () => {
+        this.setState({ showBettingResult: false, bettingResult: '' });
+    }
+
     render() {
-        const { banners, userInfo, schedules, teams, ranks, users, history } = this.state;
+        const { banners, userInfo, schedules, teams, ranks, users, history, showBettingResult, bettingResult } = this.state;
 
         const expandedSchedules = this.expandSchedule(schedules, teams);
 
         return (
-            <div className="App">
-                <ImageSlider images={banners} />
-                <MyBar userInfo={userInfo} />
-                <MainTabs
-                    schedules={expandedSchedules}
-                    ranks={this.expandRank(ranks, users)}
-                    userInfo={userInfo}
-                    history={this.expandHistory(history, expandedSchedules)}
-                />
+            <div>
+                <div className="App">
+                    <ImageSlider images={banners} />
+                    <MyBar userInfo={userInfo} />
+                    <MainTabs
+                        schedules={expandedSchedules}
+                        ranks={this.expandRank(ranks, users)}
+                        userInfo={userInfo}
+                        history={this.expandHistory(history, expandedSchedules)}
+                        onBettingResult={this.handleBettingResult}
+                    />
+                </div>
+                <Dialog
+                    open={userInfo.checkin}
+                    onClose={this.handleCheckinClose}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">每日奖励</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">恭喜获得500金币！</DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.handleCheckinClose} color="primary">好的</Button>
+                    </DialogActions>
+                </Dialog>
+                <Dialog
+                    open={showBettingResult}
+                    onClose={this.handleBettingResultClose}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">投注结果</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">{bettingResult}</DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.handleBettingResultClose} color="primary">好的</Button>
+                    </DialogActions>
+                </Dialog>
             </div>
         );
     }
@@ -79,18 +149,25 @@ class App extends Component {
 
     fetchAll = async () => {
         try {
-            const { data: userInfo } = await axios.get('./samples/my.json');
             const { data: banners } = await axios.get('./samples/banners.json');
             const { data: teams } = await axios.get('./samples/teams.json');
-            const { data: schedules } = await axios.get('./samples/schedules.json');
-            const { data: users } = await axios.get('./samples/users.json');
-            const { data: ranks } = await axios.get('./samples/ranks.json');
-            const { data: history } = await axios.get('./samples/history.json');
 
-            this.setState({userInfo, banners, teams, schedules, users, ranks, history});
+            this.setState({ banners, teams });
+
+            await this.fetchLatest();
         } catch (e) {
             console.error('Fetching all failed: ' + e)
         }
+    }
+
+    fetchLatest = async () => {
+        const { data: userInfo } = await axios.get('./samples/my.json');
+        const { data: schedules } = await axios.get('./samples/schedules.json');
+        const { data: users } = await axios.get('./samples/users.json');
+        const { data: ranks } = await axios.get('./samples/ranks.json');
+        const { data: history } = await axios.get('./samples/history.json');
+
+        this.setState({ userInfo, schedules, users, ranks, history });
     }
 }
 

@@ -33,7 +33,7 @@ class BetTab extends React.Component {
 
             return acc.concat(
                 <ListItem key={schedule.id}>
-                    <BetItem userInfo={userInfo} schedule={schedule} showBettingLayout />
+                    <BetItem userInfo={userInfo} schedule={schedule} showBettingLayout onBettingResult={this.props.onBettingResult} />
                 </ListItem>
             )
         }, []);

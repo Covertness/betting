@@ -72,7 +72,7 @@ class MainTabs extends React.Component {
                     animateHeight={this.state.animateHeight}
                 >
                     <TabContainer dir={theme.direction}><ScheduleTab label="赛程" schedules={schedules} onChangeIndex={this.handleSubTabChange} /></TabContainer>
-                    <TabContainer dir={theme.direction}><BetTab label="投注" schedules={schedules} userInfo={userInfo} onChangeIndex={this.handleSubTabChange} /></TabContainer>
+                    <TabContainer dir={theme.direction}><BetTab label="投注" schedules={schedules} userInfo={userInfo} onChangeIndex={this.handleSubTabChange} onBettingResult={this.props.onBettingResult} /></TabContainer>
                     <TabContainer dir={theme.direction}><RankTab label="排名" ranks={ranks} userInfo={userInfo} /></TabContainer>
                     <TabContainer dir={theme.direction}><MyTab label="投注记录" history={history} /></TabContainer>
                 </SwipeableViews>
