@@ -48,6 +48,7 @@ class Login extends Component {
         //     .then(response => {
         //         console.log(response);
         //         localStorage.setItem('token', );
+        //         window.location.href = window.location.href + '?time=' + ((new Date()).getTime());
         //     })
         //     .catch(error => {
         //         console.error(error);
@@ -55,7 +56,7 @@ class Login extends Component {
         //     });
 
         localStorage.setItem('token', 1);
-        window.location.reload();
+        window.location.href = window.location.href + '?time=' + ((new Date()).getTime());
     }
 
     handleForget = () => {
