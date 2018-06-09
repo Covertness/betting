@@ -7,6 +7,7 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import moment from 'moment';
 import axios from 'axios';
+import { Config } from './Config';
 
 const styles = {
     row: {
@@ -95,35 +96,33 @@ class BetItem extends React.Component {
     handleBetting = () => {
         const { money, currentOddsIndex } = this.state;
         const { schedule } = this.props;
+        const { id, odds } = schedule;
 
         this.setState({ isBetting: true });
 
-        // axios.post('/betting', { scheduleId: schedule.id, money, currentOddsIndex })
-        //     .then(response => {
-        //         console.log(response);
+        const myId = parseInt(localStorage.getItem('token'), 10);
 
-        //         this.setState({ isBetting: false, money: '' });
+        axios.post(Config.host + '/bet', { user_id: myId, schedule_id: id, betting_money: parseInt(money, 10), betting_result: currentOddsIndex + 1, betting_odds: odds[currentOddsIndex] })
+            .then(response => {
+                console.log(response);
 
-        //         this.props.onBettingResult({
-        //             code: 0,
-        //             data: response
-        //         });
-        //     })
-        //     .catch(error => {
-        //         console.error(error);
+                this.setState({ isBetting: false, money: '' });
 
-        //         this.setState({ isBetting: false });
+                this.props.onBettingResult({
+                    code: 0,
+                    data: response
+                });
+            })
+            .catch(error => {
+                console.error(error);
 
-        //         this.props.onBettingResult({
-        //             code: 1,
-        //             message: error.message
-        //         });
-        //     });
+                this.setState({ isBetting: false });
 
-        this.setState({ isBetting: false, money: '' });
-        this.props.onBettingResult({
-            code: 0
-        });
+                this.props.onBettingResult({
+                    code: 1,
+                    message: JSON.stringify(error.response.data)
+                });
+            });
     }
 
     render() {

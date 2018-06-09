@@ -16,6 +16,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import classNames from 'classnames';
 import ErrorSnackbar from './ErrorSnackbar';
 import axios from 'axios';
+import { Config } from './Config';
 
 const styles = theme => ({
     root: {
@@ -79,19 +80,16 @@ class Login extends Component {
 
         this.setState({ loading: true });
 
-        // axios.post('/login', { rtx, name, password })
-        //     .then(response => {
-        //         console.log(response);
-        //         localStorage.setItem('token', );
-        //         window.location.href = window.location.href + '?time=' + ((new Date()).getTime());
-        //     })
-        //     .catch(error => {
-        //         console.error(error);
-        //         this.setState({ loading: false, errorOpen: true, errorMessage: error.message });
-        //     });
-
-        localStorage.setItem('token', 1);
-        window.location.href = window.location.href + '?time=' + ((new Date()).getTime());
+        axios.post(Config.host + '/authorize', { en_name: rtx, ch_name: name, password })
+            .then(response => {
+                console.log(response);
+                localStorage.setItem('token', response.data.user_id);
+                window.location.href = window.location.href + '?time=' + ((new Date()).getTime());
+            })
+            .catch(error => {
+                console.error(error);
+                this.setState({ loading: false, errorOpen: true, errorMessage: error.response.data.desc || error.message });
+            });
     }
 
     handleForget = () => {
@@ -113,7 +111,7 @@ class Login extends Component {
         return (
             <div>
                 <div className={loading ? classNames(classes.loadingRoot, classes.root) : classes.root}>
-                    <img src="./img/login-logo.png" className={classes.logo} />
+                    <img src="./img/login-logo.png" alt="logo" className={classes.logo} />
                     <FormControl className={classes.formControl}>
                         <InputLabel htmlFor="rtx">RTX账号</InputLabel>
                         <Input id="rtx" startAdornment={

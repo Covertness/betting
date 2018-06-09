@@ -30,7 +30,7 @@ const styles = {
 }
 
 function AlertDialog(props) {
-    const { classes, open, onClose, title, children, confirm } = props;
+    const { classes, open, onClose, title, children, confirm, onClick } = props;
 
     return (
         <div className={classes.root}>
@@ -45,7 +45,7 @@ function AlertDialog(props) {
                     <DialogContentText className={classes.content} id="alert-dialog-description">{children}</DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={onClose} color="primary">{confirm}</Button>
+                    <Button onClick={onClick} color="primary">{confirm}</Button>
                 </DialogActions>
             </Dialog>
         </div>

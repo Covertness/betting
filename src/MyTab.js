@@ -76,11 +76,11 @@ class MyTab extends React.Component {
                 <ListItem key={betting.id} className={classNames(classes.betting, bettingCustom)}>
                     <label className={classes.number}>{index + 1}</label>
                     <div className={classes.bettingTeams}>
-                        <Button className={classes.teamChooser} disableRipple size="small" variant="raised" color={betting.result === 0 ? "secondary" : "default"}>
+                        <Button className={classes.teamChooser} disableRipple size="small" variant="raised" color={betting.result === 1 ? "secondary" : "default"}>
                             <Avatar className={classes.teamFlag} src={betting.schedule.homeTeam.logo} />
                             主胜（{betting.schedule.odds[0]}）
                     </Button>
-                        <Button className={classes.teamChooser} disableRipple size="small" variant="raised" color={betting.result === 1 ? "secondary" : "default"}>
+                        <Button className={classes.teamChooser} disableRipple size="small" variant="raised" color={betting.result === 2 ? "secondary" : "default"}>
                             <Avatar className={classes.teamFlag} src={betting.schedule.awayTeam.logo} />
                             客胜（{betting.schedule.odds[1]}）
                     </Button>
