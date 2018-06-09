@@ -71,7 +71,8 @@ class BetItem extends React.Component {
         if (this.props.showBettingLayout) {
             this.state = {
                 money: '',
-                currentOddsIndex: 0
+                currentOddsIndex: 0,
+                isBetting: false
             }
         }
     }
@@ -95,11 +96,13 @@ class BetItem extends React.Component {
         const { money, currentOddsIndex } = this.state;
         const { schedule } = this.props;
 
+        this.setState({ isBetting: true });
+
         // axios.post('/betting', { scheduleId: schedule.id, money, currentOddsIndex })
         //     .then(response => {
         //         console.log(response);
 
-        //         this.setState({ money: '' });
+        //         this.setState({ isBetting: false, money: '' });
 
         //         this.props.onBettingResult({
         //             code: 0,
@@ -108,13 +111,16 @@ class BetItem extends React.Component {
         //     })
         //     .catch(error => {
         //         console.error(error);
+
+        //         this.setState({ isBetting: false });
+
         //         this.props.onBettingResult({
         //             code: 1,
         //             message: error.message
         //         });
         //     });
 
-        this.setState({ money: '' });
+        this.setState({ isBetting: false, money: '' });
         this.props.onBettingResult({
             code: 0
         });
@@ -171,7 +177,7 @@ class BetItem extends React.Component {
     renderBettingLayout = () => {
         const { classes, schedule } = this.props;
         const { odds, disableBetting } = schedule;
-        const { money, currentOddsIndex } = this.state;
+        const { money, currentOddsIndex, isBetting } = this.state;
 
         return (
             <div>
@@ -193,9 +199,10 @@ class BetItem extends React.Component {
                         placeholder="1000"
                         type="number"
                         value={money}
+                        disabled={disableBetting || isBetting}
                         onChange={this.handleBetNumChange}
                     />
-                    <Button size="small" variant="raised" color="primary" disabled={disableBetting} onClick={this.handleBetting}>{disableBetting ? '不可投注' : '投注'}</Button>
+                    <Button size="small" variant="raised" color="primary" disabled={disableBetting || isBetting} onClick={this.handleBetting}>{disableBetting ? '不可投注' : (isBetting ? '投注中' : '投注')}</Button>
                 </div>
             </div>
         );

@@ -9,6 +9,7 @@ import axios from 'axios';
 import ImageSlider from './ImageSlider';
 import MyBar from './MyBar';
 import MainTabs from './MainTabs';
+import ErrorSnackbar from './ErrorSnackbar';
 
 class App extends Component {
     constructor(props) {
@@ -27,7 +28,9 @@ class App extends Component {
                 checkin: []
             },
             showBettingResult: false,
-            bettingResult: ''
+            bettingResult: '',
+            errorOpen: false,
+            errorMessage: ''
         };
     }
 
@@ -50,8 +53,8 @@ class App extends Component {
         if (code === 0) {
             bettingResult = '恭喜投注成功！'
 
-            this.fetchLatest().catch(error => {
-                console.error('Fetching latest failed: ' + error)
+            this.fetchLatest().catch(e => {
+                this.setState({ errorOpen: true, errorMessage: 'Fetching latest failed: ' + e.request.responseURL + ' ' + e.response.data });
             });
         } else {
             bettingResult = '投注失败：' + result.message
@@ -64,8 +67,12 @@ class App extends Component {
         this.setState({ showBettingResult: false, bettingResult: '' });
     }
 
+    handleErrorClose = () => {
+        this.setState({ errorOpen: false });
+    }
+
     render() {
-        const { banners, userInfo, schedules, teams, ranks, users, history, showBettingResult, bettingResult } = this.state;
+        const { banners, userInfo, schedules, teams, ranks, users, history, showBettingResult, bettingResult, errorOpen, errorMessage } = this.state;
 
         const expandedSchedules = this.expandSchedule(schedules, teams);
 
@@ -110,6 +117,7 @@ class App extends Component {
                         <Button onClick={this.handleBettingResultClose} color="primary">好的</Button>
                     </DialogActions>
                 </Dialog>
+                <ErrorSnackbar open={errorOpen} onClose={this.handleErrorClose} message={errorMessage} />
             </div>
         );
     }
@@ -156,7 +164,7 @@ class App extends Component {
 
             await this.fetchLatest();
         } catch (e) {
-            console.error('Fetching all failed: ' + e)
+            this.setState({ errorOpen: true, errorMessage: 'Fetching all failed: ' + e.request.responseURL + ' ' + e.response.data });
         }
     }
 
