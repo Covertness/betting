@@ -5,6 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
+import CountUp from 'react-countup';
 
 const styles = {
     row: {
@@ -50,9 +51,18 @@ const styles = {
     }
 };
 
+let oldMoney = 0;
+
 function MyBar(props) {
     const { classes, userInfo } = props;
-    const { nickName, avatarUrl, money } = userInfo;
+    const { nickName, avatarUrl, money, checkin } = userInfo;
+
+    let startMoney = oldMoney;
+    oldMoney = money;
+
+    if (checkin) {
+        startMoney = money - 500;
+    }
 
     return (
         <div className={classes.row}>
@@ -66,7 +76,7 @@ function MyBar(props) {
             </div>
             <div className={classes.money}>
                 <img className={classes.moneyIcon} src="img/money.png" alt="money" />
-                <label className={classes.moneyText}>{money}金币</label>
+                <label className={classes.moneyText}>{money > 0 ? <CountUp start={startMoney} end={money} /> : 0}金币</label>
                 <Button variant="fab" mini color="secondary" aria-label="add" className={classes.button}>
                     <AddIcon />
                 </Button>

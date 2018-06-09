@@ -1,15 +1,10 @@
 import React, { Component } from 'react';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Button from '@material-ui/core/Button';
 import axios from 'axios';
 import ImageSlider from './ImageSlider';
 import MyBar from './MyBar';
 import MainTabs from './MainTabs';
 import ErrorSnackbar from './ErrorSnackbar';
+import AlertDialog from './AlertDialog';
 
 class App extends Component {
     constructor(props) {
@@ -89,34 +84,12 @@ class App extends Component {
                         onBettingResult={this.handleBettingResult}
                     />
                 </div>
-                <Dialog
-                    open={userInfo.checkin}
-                    onClose={this.handleCheckinClose}
-                    aria-labelledby="alert-dialog-title"
-                    aria-describedby="alert-dialog-description"
-                >
-                    <DialogTitle id="alert-dialog-title">每日奖励</DialogTitle>
-                    <DialogContent>
-                        <DialogContentText id="alert-dialog-description">恭喜获得500金币！</DialogContentText>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={this.handleCheckinClose} color="primary">好的</Button>
-                    </DialogActions>
-                </Dialog>
-                <Dialog
-                    open={showBettingResult}
-                    onClose={this.handleBettingResultClose}
-                    aria-labelledby="alert-dialog-title"
-                    aria-describedby="alert-dialog-description"
-                >
-                    <DialogTitle id="alert-dialog-title">投注结果</DialogTitle>
-                    <DialogContent>
-                        <DialogContentText id="alert-dialog-description">{bettingResult}</DialogContentText>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={this.handleBettingResultClose} color="primary">好的</Button>
-                    </DialogActions>
-                </Dialog>
+                <AlertDialog open={userInfo.checkin} onClose={this.handleCheckinClose} title="每日领奖" confirm="确定">
+                    <img src="img/money.png" alt="money" />&nbsp;+500金币
+                </AlertDialog>
+                <AlertDialog open={showBettingResult} onClose={this.handleBettingResultClose} title="投注结果" confirm="确定">
+                    {bettingResult}
+                </AlertDialog>
                 <ErrorSnackbar open={errorOpen} onClose={this.handleErrorClose} message={errorMessage} />
             </div>
         );
