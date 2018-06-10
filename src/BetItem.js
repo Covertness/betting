@@ -7,6 +7,7 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import moment from 'moment';
 import axios from 'axios';
+import LazyLoad from 'react-lazyload';
 import { Config } from './Config';
 
 const styles = {
@@ -31,7 +32,6 @@ const styles = {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        width: 300,
         margin: 'auto',
         marginTop: 30,
         marginBottom: 20
@@ -39,7 +39,11 @@ const styles = {
     team: {
         display: 'flex',
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
+        margin: 10
+    },
+    teamTitle: {
+        width: 80
     },
     betInfo: {
         display: 'flex',
@@ -80,6 +84,10 @@ class BetItem extends React.Component {
 
     handleBetHome = () => {
         this.setState({ currentOddsIndex: 0 });
+    }
+
+    handleBetTied = () => {
+        this.setState({ currentOddsIndex: 2 });
     }
 
     handleBetAway = () => {
@@ -139,13 +147,17 @@ class BetItem extends React.Component {
                 </div>
                 <div className={classes.teamInfo}>
                     <div className={classes.team}>
-                        <ListItemText primary={homeTeam.name} />
-                        <Avatar src={homeTeam.logo} />
+                        <ListItemText className={classes.teamTitle} primary={homeTeam.name} />
+                        <LazyLoad height={40}>
+                            <Avatar src={homeTeam.logo} />
+                        </LazyLoad>
                     </div>
                     <label>{moment(time).format('HH:mm')}</label>
                     <div className={classes.team}>
-                        <Avatar src={awayTeam.logo} />
-                        <ListItemText primary={awayTeam.name} />
+                        <LazyLoad height={40}>
+                            <Avatar src={awayTeam.logo} />
+                        </LazyLoad>
+                        <ListItemText className={classes.teamTitle} primary={awayTeam.name} />
                     </div>
                 </div>
                 {showBettingLayout && this.renderBettingLayout()}
@@ -175,14 +187,22 @@ class BetItem extends React.Component {
 
     renderBettingLayout = () => {
         const { classes, schedule } = this.props;
-        const { odds, disableBetting } = schedule;
+        const { odds, disableBetting, hasBetting } = schedule;
         const { money, currentOddsIndex, isBetting } = this.state;
+
+        let betText = '投注';
+        if (disableBetting) betText = '不可投注'
+        else if (isBetting) betText = '投注中'
+        else if (hasBetting) betText = '已投注'
 
         return (
             <div>
                 <div className={classes.betInfo}>
                     <Button className={classes.teamChooser} size="small" variant="raised" color={currentOddsIndex === 0 ? "secondary" : "default"} onClick={this.handleBetHome}>
                         主胜（{odds[0]}）
+                    </Button>
+                    <Button className={classes.teamChooser} size="small" variant="raised" color={currentOddsIndex === 2 ? "secondary" : "default"} onClick={this.handleBetTied}>
+                        平局（{odds[2]}）
                     </Button>
                     <Button className={classes.teamChooser} size="small" variant="raised" color={currentOddsIndex === 1 ? "secondary" : "default"} onClick={this.handleBetAway}>
                         客胜（{odds[1]}）
@@ -198,10 +218,10 @@ class BetItem extends React.Component {
                         placeholder="1000"
                         type="number"
                         value={money}
-                        disabled={disableBetting || isBetting}
+                        disabled={betText !== '投注'}
                         onChange={this.handleBetNumChange}
                     />
-                    <Button size="small" variant="raised" color="primary" disabled={disableBetting || isBetting} onClick={this.handleBetting}>{disableBetting ? '不可投注' : (isBetting ? '投注中' : '投注')}</Button>
+                    <Button size="small" variant="raised" color="primary" disabled={betText !== '投注'} onClick={this.handleBetting}>{betText}</Button>
                 </div>
             </div>
         );

@@ -32,7 +32,8 @@ const styles = {
         margin: 15,
         color: '#cebf88',
         backgroundColor: '#2a2d3a',
-        borderRadius: 10
+        borderRadius: 10,
+        padding: 10
     },
     moneyIcon: {
         marginLeft: 5,
@@ -55,14 +56,10 @@ let oldMoney = 0;
 
 function MyBar(props) {
     const { classes, userInfo } = props;
-    const { nickName, avatarUrl, money, checkin } = userInfo;
+    const { nickName, avatarUrl, money } = userInfo;
 
     let startMoney = oldMoney;
     oldMoney = money;
-
-    if (checkin) {
-        startMoney = money - 500;
-    }
 
     return (
         <div className={classes.row}>
@@ -76,10 +73,10 @@ function MyBar(props) {
             </div>
             <div className={classes.money}>
                 <img className={classes.moneyIcon} src="img/money.png" alt="money" />
-                <label className={classes.moneyText}>{money > 0 ? <CountUp start={startMoney} end={money} /> : 0}金币</label>
-                <Button variant="fab" mini color="secondary" aria-label="add" className={classes.button}>
+                <label className={classes.moneyText}><CountUp start={startMoney} end={money} />金币</label>
+                {/* <Button variant="fab" mini color="secondary" aria-label="add" className={classes.button}>
                     <AddIcon />
-                </Button>
+                </Button> */}
             </div>
         </div>
     );

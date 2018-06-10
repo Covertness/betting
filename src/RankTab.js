@@ -71,14 +71,14 @@ class RankTab extends React.Component {
                 <div className={classes.myBet}>
                     <div className={classes.myBetInfo}>
                         <label className={classes.myBetCountNumber}>{userInfo.betCount}</label>
-                        <label className={classes.myBetPrompt}>总竞猜场数</label>
+                        <label className={classes.myBetPrompt}>我的排名</label>
                     </div>
                     <div style={{margin: '15px 0 15px 0', width: 2, height: 50, backgroundColor: '#cebf88'}}></div> 
                     <div className={classes.myBetInfo}>
                         <label className={classes.myIncomeNumber}>
                             {userInfo.income > 0 ? '+' + userInfo.income : userInfo.income}
                         </label>
-                        <label className={classes.myBetPrompt}>总收入</label>
+                        <label className={classes.myBetPrompt}>我的金币</label>
                     </div>
                 </div>
                 <Table className={classes.rankTable}>
@@ -91,30 +91,13 @@ class RankTab extends React.Component {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        <TableRow className={classes.rankRow} key={userInfo.id}>
-                            <CustomTableCell style={{ color: 'red' }}>
-                                {this.renderRankNum(userInfo.rank)}
-                            </CustomTableCell>
-                            <CustomTableCell>
-                                <div className={classes.user}>
-                                    <Avatar
-                                        alt={userInfo.nickName}
-                                        src={userInfo.avatarUrl}
-                                        className={classes.avatar}
-                                    />
-                                    <label className={classes.nickName}>{userInfo.nickName}</label>
-                                </div>
-                            </CustomTableCell>
-                            <CustomTableCell>{userInfo.winCount + '/' + userInfo.betCount}场</CustomTableCell>
-                            <CustomTableCell>{userInfo.money}币</CustomTableCell>
-                        </TableRow>
                         {ranks.reduce((acc, n, i) => {
-                            if (n.id === userInfo.id) return acc;
+                            const rankNumStyle = n.id === userInfo.id ? {} : { color: 'red' };
 
                             const { id, nickName, avatarUrl, betCount, winCount, money } = n;
                             return acc.concat(
                                 <TableRow className={classes.rankRow} key={id}>
-                                    <CustomTableCell>
+                                    <CustomTableCell style={rankNumStyle}>
                                         {this.renderRankNum(i + 1)}
                                     </CustomTableCell>
                                     <CustomTableCell>

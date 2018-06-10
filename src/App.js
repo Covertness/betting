@@ -50,11 +50,7 @@ class App extends Component {
                 return this.fetchLatest();
             })
             .then(() => {
-                this.setState((prevState, _props) => ({
-                    userInfo: Object.assign(prevState.userInfo, {
-                        checkin: false
-                    })
-                }));
+                this.handleCheckinClose();
             }).catch(error => {
                 console.error(error);
                 this.showError('checkin failed: ' + error.request.responseURL + ' ' + JSON.stringify(error.response.data));
@@ -105,7 +101,7 @@ class App extends Component {
                     />
                 </div>
                 <AlertDialog open={userInfo.checkin} onClose={this.handleCheckinClose} onClick={this.handleCheckinClick} title="每日领奖" confirm="领取奖励">
-                    <img src="img/money.png" alt="money" />&nbsp;+500金币
+                    <img src="img/money.png" alt="money" />&nbsp;+50金币
                 </AlertDialog>
                 <AlertDialog open={showBettingResult} onClose={this.handleBettingResultClose} onClick={this.handleBettingResultClose} title="投注结果" confirm="确定">
                     {bettingResult}
@@ -142,12 +138,19 @@ class App extends Component {
     fetchAll = async () => {
         try {
             const { data: banners } = await axios.get('./samples/banners.json');
-            const { data: teams } = await axios.get('./samples/teams.json');
+            const { data: {country} } = await axios.get(Config.host + '/country');
+            const { data: {tips: {tips}} } = await axios.get(Config.host + '/tips');
 
-            this.setState({ banners, teams });
+            this.setState({ banners, teams: this.transformTeams(country) });
 
             await this.fetchLatest();
         } catch (e) {
+            if (e.response.data && e.response.data.status === 9) {
+                // login again
+                localStorage.clear();
+                window.location.href = window.location.href + '?time=' + ((new Date()).getTime());
+            }
+
             console.error(e);
             this.setState({ errorOpen: true, errorMessage: 'Fetching all failed: ' + e.request.responseURL + ' ' + JSON.stringify(e.response.data) });
         }
@@ -163,36 +166,50 @@ class App extends Component {
         const { data: { betting_history } } = await axios.get(Config.host + '/betting_history?user_id=' + myId);
         const { data: { reward_history } } = await axios.get(Config.host + '/reward_history?user_id=' + myId);
 
-        this.setState({ userInfo: this.transformMy(userInfo), schedules: this.transformSchedules(schedules), ranks: this.transformRanks(rank), history: this.transformHistory(betting_history, reward_history) });
+        this.setState({ userInfo: this.transformMy(userInfo), schedules: this.transformSchedules(schedules, betting_history), ranks: this.transformRanks(rank), history: this.transformHistory(betting_history, reward_history) });
     }
 
     transformMy = my => {
+        let checkin = my.daily_reward;
+        if (checkin === true && localStorage.getItem('first_login') === 'true') {
+            checkin = false;
+        }
+
         return {
             "id": my.id,
-            "nickName": my.cn_name,
-            "avatarUrl": "//tva3.sinaimg.cn/crop.0.0.180.180.180/5e37efe3jw1e8qgp5bmzyj2050050aa8.jpg",
+            "nickName": my.en_name,
+            "avatarUrl": "//upload.wikimedia.org/wikipedia/commons/1/1e/Default-avatar.jpg",
             "money": my.money,
             "income": my.money,
-            "betCount": my.win_count,
+            "betCount": my.bet_count,
             "winCount": my.win_count,
             "rank": my.rank,
-            "checkin": my.daily_reward
+            "checkin": checkin
         }
     }
 
-    transformSchedules = schedules => schedules.map(schedule => {
-        return {
-            id: schedule.schedule_id,
-            homeTeamId: 1, // schedule.home_team,
-            awayTeamId: 0, // schedule.away_team,
-            odds: [schedule.home_team_win_odds, schedule.away_team_win_odds, schedule.tied_odds],
-            time: schedule.schedule_time,
-            group: schedule.schedule_group,
-            groupTabIndex: schedule.schedule_type,
-            disableBetting: schedule.disable_betting,
-            result: schedule.schedule_status
-        }
-    })
+    transformSchedules = (schedules, bettingHistory) => {
+        const bettingHistoryMap = {};
+        bettingHistory.forEach(element => {
+            bettingHistoryMap[element.schedule_id] = element;
+        });
+
+        return schedules.map(schedule => {
+            return {
+                id: schedule.schedule_id,
+                homeTeamId: schedule.home_team,
+                awayTeamId: schedule.away_team,
+                odds: [schedule.home_team_win_odds, schedule.away_team_win_odds, schedule.tied_odds],
+                time: schedule.schedule_time,
+                group: schedule.schedule_group === 'X' ? null : schedule.schedule_group,
+                groupTabIndex: schedule.schedule_type,
+                disableBetting: schedule.disable_betting,
+                hasBetting: bettingHistoryMap[schedule.schedule_id] != null,
+                result: schedule.schedule_status,
+                showBet: schedule.enable_dispaly
+            }
+        })
+    }
 
     transformHistory = (bettingHistory, rewardHistory) => {
         const betting = bettingHistory.map((item, index) => {
@@ -218,11 +235,19 @@ class App extends Component {
     transformRanks = ranks => ranks.map((rank, index) => {
         return {
             id: index,
-            nickName: rank.cn_name,
-            avatarUrl: "//tva3.sinaimg.cn/crop.0.0.180.180.180/5e37efe3jw1e8qgp5bmzyj2050050aa8.jpg",
+            nickName: rank.en_name,
+            avatarUrl: "//upload.wikimedia.org/wikipedia/commons/1/1e/Default-avatar.jpg",
             money: rank.money,
-            betCount: 0,
-            winCount: 0
+            betCount: rank.bet_count,
+            winCount: rank.win_count
+        }
+    })
+
+    transformTeams = teams => teams.map(team => {
+        return {
+            id: team.id,
+            name: team.name,
+            logo: team.logo === 'unknown' ? './img/question.png' : team.logo
         }
     })
 

@@ -84,6 +84,7 @@ class Login extends Component {
             .then(response => {
                 console.log(response);
                 localStorage.setItem('token', response.data.user_id);
+                localStorage.setItem('first_login', response.data.first_login);
                 window.location.href = window.location.href + '?time=' + ((new Date()).getTime());
             })
             .catch(error => {

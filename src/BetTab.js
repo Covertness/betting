@@ -29,6 +29,7 @@ class BetTab extends React.Component {
         const { classes, label, schedules, userInfo } = this.props;
 
         const listBets = schedules.reduce((acc, schedule) => {
+            if (!schedule.showBet) return acc;
             if (schedule.groupTabIndex !== this.state.groupIndex) return acc;
 
             return acc.concat(

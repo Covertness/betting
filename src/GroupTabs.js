@@ -18,7 +18,7 @@ const styles = {
 };
 
 class GroupTabs extends React.Component {
-    handleChange = (event, value) => {
+    handleChange = (_event, value) => {
         this.props.onTabChange(value);
     };
 
@@ -48,6 +48,17 @@ class GroupTabs extends React.Component {
                 </AppBar>
             </div>
         );
+    }
+
+    static index2lable(index) {
+        switch(index) {
+            case 0: return "小组赛";
+            case 1: return "8强赛";
+            case 2: return "4强赛";
+            case 3: return "半决赛";
+            case 4: return "总决赛";
+            default: return "";
+        }
     }
 }
 
