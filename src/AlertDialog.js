@@ -14,10 +14,9 @@ const styles = {
     title: {
         backgroundImage: 'url(./img/alert-title.png)',
         backgroundSize: 'cover',
-        width: 200,
         textAlign: 'center',
         color: '#cebf88',
-        fontSize: 26
+        fontSize: 20
     },
     content: {
         display: 'flex',
@@ -25,7 +24,7 @@ const styles = {
         alignContent: 'center',
         justifyContent: 'center',
         margin: 20,
-        fontSize: 20
+        fontSize: 16
     }
 }
 

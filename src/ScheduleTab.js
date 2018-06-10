@@ -26,7 +26,7 @@ class ScheduleTab extends React.Component {
     };
 
     render() {
-        const { classes, label, userInfo, schedules } = this.props;
+        const { classes, label, userInfo, schedules, onQuestionClick } = this.props;
 
         const listBets = schedules.reduce((acc, schedule) => {
             if (schedule.groupTabIndex !== this.state.groupIndex) return acc;
@@ -41,7 +41,7 @@ class ScheduleTab extends React.Component {
         return (
             <div className={classes.root}>
                 <GroupTabs tabIndex={this.state.groupIndex} onTabChange={this.handleGroupChange} />
-                <TabTitle icon='schedule' label={label} />
+                <TabTitle icon='schedule' label={label} onQuestionClick={onQuestionClick} />
                 <List className={classes.schedules}>{listBets}</List>
             </div>
         )

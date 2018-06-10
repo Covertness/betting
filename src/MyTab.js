@@ -50,10 +50,10 @@ const styles = {
         margin: 5
     },
     teamChooser: {
-        fontSize: 5,
-        padding: '3px 3px',
-        minWidth: 20,
-        minHeight: 30
+        fontSize: '0.8rem',
+        padding: '0.2rem 0.15rem',
+        minWidth: '0.5rem',
+        minHeight: '0.8rem'
     },
     number: {
         minWidth: 10

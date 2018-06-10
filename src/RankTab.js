@@ -47,6 +47,9 @@ const styles = {
     rankNum: {
         fontSize: 20,
         width: 15
+    },
+    myItem: {
+        backgroundColor: 'red'
     }
 };
 
@@ -70,7 +73,7 @@ class RankTab extends React.Component {
                 <TabTitle icon='rank' label={label} />
                 <div className={classes.myBet}>
                     <div className={classes.myBetInfo}>
-                        <label className={classes.myBetCountNumber}>{userInfo.betCount}</label>
+                        <label className={classes.myBetCountNumber}>{userInfo.rank}</label>
                         <label className={classes.myBetPrompt}>我的排名</label>
                     </div>
                     <div style={{margin: '15px 0 15px 0', width: 2, height: 50, backgroundColor: '#cebf88'}}></div> 
@@ -92,12 +95,12 @@ class RankTab extends React.Component {
                     </TableHead>
                     <TableBody>
                         {ranks.reduce((acc, n, i) => {
-                            const rankNumStyle = n.id === userInfo.id ? {} : { color: 'red' };
+                            const myselfStyle = (n.id === userInfo.id && i < 10) ? classes.myItem : null;
 
                             const { id, nickName, avatarUrl, betCount, winCount, money } = n;
                             return acc.concat(
-                                <TableRow className={classes.rankRow} key={id}>
-                                    <CustomTableCell style={rankNumStyle}>
+                                <TableRow classes={{root: myselfStyle}} key={id}>
+                                    <CustomTableCell>
                                         {this.renderRankNum(i + 1)}
                                     </CustomTableCell>
                                     <CustomTableCell>

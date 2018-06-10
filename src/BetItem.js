@@ -66,6 +66,9 @@ const styles = {
     bet: {
         display: 'flex',
         justifyContent: 'space-between'
+    },
+    flag: {
+        boxShadow: 'rgba(0,0,0,0.8) 0 0 3px'
     }
 };
 
@@ -149,13 +152,13 @@ class BetItem extends React.Component {
                     <div className={classes.team}>
                         <ListItemText className={classes.teamTitle} primary={homeTeam.name} />
                         <LazyLoad height={40}>
-                            <Avatar src={homeTeam.logo} />
+                            <Avatar src={homeTeam.logo} className={classes.flag} />
                         </LazyLoad>
                     </div>
                     <label>{moment(time).format('HH:mm')}</label>
                     <div className={classes.team}>
                         <LazyLoad height={40}>
-                            <Avatar src={awayTeam.logo} />
+                            <Avatar src={awayTeam.logo} className={classes.flag} />
                         </LazyLoad>
                         <ListItemText className={classes.teamTitle} primary={awayTeam.name} />
                     </div>

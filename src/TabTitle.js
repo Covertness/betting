@@ -23,16 +23,25 @@ const styles = {
         padding: 5,
         background: 'rgba(0, 0, 0, 0.5)',
         borderRadius: 5
+    },
+    button: {
+        position: 'absolute',
+        right: 5
     }
 };
 
 function TabTitle(props) {
-    const { classes, icon, label } = props;
+    const { classes, icon, label, onQuestionClick } = props;
 
     return (
         <div className={classes.row}>
             <img src={"img/" + icon + ".png"} alt={icon} className={classes.icon} />
             <label>{label}</label>
+            {label === '赛程' && (
+                <button className={classes.button} onClick={onQuestionClick}>
+                    <img src="./img/question.png" alt="question" width={50} />
+                </button>
+            )}
         </div>
     );
 }

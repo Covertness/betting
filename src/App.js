@@ -25,7 +25,22 @@ class App extends Component {
             showBettingResult: false,
             bettingResult: '',
             errorOpen: false,
-            errorMessage: ''
+            errorMessage: '',
+            ruleOpen: false,
+            tips: {
+                reward: {
+                    content: '每天领取奖励 50 个金币',
+                    enable_display: true
+                },
+                notice: {
+                    content: '重要通知',
+                    enable_display: true
+                },
+                rule: {
+                    content: '游戏规则',
+                    enable_display: true
+                }
+            }
         };
     }
 
@@ -62,6 +77,12 @@ class App extends Component {
             });
     }
 
+    handleQuestionClick = () => {
+        this.setState({
+            ruleOpen: true
+        });
+    }
+
     handleBettingResult = (result) => {
         const code = result.code;
 
@@ -83,12 +104,17 @@ class App extends Component {
         this.setState({ showBettingResult: false, bettingResult: '' });
     }
 
+    handleRuleClose = () => {
+        this.setState({ ruleOpen: false });
+    }
+
     handleErrorClose = () => {
         this.setState({ errorOpen: false });
     }
 
     render() {
-        const { banners, userInfo, schedules, teams, ranks, history, showBettingResult, bettingResult, errorOpen, errorMessage } = this.state;
+        const { banners, userInfo, schedules, teams, ranks, history, showBettingResult, bettingResult, errorOpen, ruleOpen, errorMessage, tips } = this.state;
+        const { reward, notice, rule } = tips;
 
         const expandedSchedules = this.expandSchedule(schedules, teams);
 
@@ -103,13 +129,17 @@ class App extends Component {
                         userInfo={userInfo}
                         history={this.expandHistory(history, expandedSchedules)}
                         onBettingResult={this.handleBettingResult}
+                        onQuestionClick={this.handleQuestionClick}
                     />
                 </div>
                 <AlertDialog open={userInfo.checkin} onClose={this.handleCheckinClose} onClick={this.handleCheckinClick} title="每日领奖" confirm="领取奖励">
-                    <img src="img/money.png" alt="money" />&nbsp;+50金币
+                    <img src="img/money.png" alt="money" />&nbsp; {reward.content}
                 </AlertDialog>
                 <AlertDialog open={showBettingResult} onClose={this.handleBettingResultClose} onClick={this.handleBettingResultClose} title="投注结果" confirm="确定">
                     {bettingResult}
+                </AlertDialog>
+                <AlertDialog open={ruleOpen} onClose={this.handleRuleClose} onClick={this.handleRuleClose} title="游戏规则" confirm="确定">
+                    {rule.content}
                 </AlertDialog>
                 <ErrorSnackbar open={errorOpen} onClose={this.handleErrorClose} message={errorMessage} />
             </div>
@@ -143,10 +173,10 @@ class App extends Component {
     fetchAll = async () => {
         try {
             const { data: banners } = await axios.get('./samples/banners.json');
-            const { data: {country} } = await axios.get(Config.host + '/country');
-            const { data: {tips: {tips}} } = await axios.get(Config.host + '/tips');
+            const { data: { country } } = await axios.get(Config.host + '/country');
+            const { data: { tips: { tips } } } = await axios.get(Config.host + '/tips');
 
-            this.setState({ banners, teams: this.transformTeams(country) });
+            this.setState({ banners, teams: this.transformTeams(country), tips: this.transformTips(tips) });
 
             await this.fetchLatest();
         } catch (e) {
@@ -183,7 +213,7 @@ class App extends Component {
         return {
             "id": my.id,
             "nickName": my.en_name,
-            "avatarUrl": "//upload.wikimedia.org/wikipedia/commons/1/1e/Default-avatar.jpg",
+            "avatarUrl": "./img/qq.png",
             "money": my.money,
             "income": my.money,
             "betCount": my.bet_count,
@@ -237,11 +267,11 @@ class App extends Component {
         return { betting, checkin }
     }
 
-    transformRanks = ranks => ranks.map((rank, index) => {
+    transformRanks = ranks => ranks.map((rank) => {
         return {
-            id: index,
+            id: rank.user_id,
             nickName: rank.en_name,
-            avatarUrl: "//upload.wikimedia.org/wikipedia/commons/1/1e/Default-avatar.jpg",
+            avatarUrl: "./img/qq.png",
             money: rank.money,
             betCount: rank.bet_count,
             winCount: rank.win_count
@@ -255,6 +285,15 @@ class App extends Component {
             logo: team.logo === 'unknown' ? './img/question.png' : team.logo
         }
     })
+
+    transformTips = tips => {
+        const names = ['reward', 'notice', 'rule'];
+        const formatted = {};
+        tips.forEach(tip => {
+            formatted[names[tip.tips_id]] = tip;
+        });
+        return formatted;
+    }
 
     showError = errorMessage => {
         this.setState({ errorOpen: true, errorMessage });
