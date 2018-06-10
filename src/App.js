@@ -30,6 +30,11 @@ class App extends Component {
     }
 
     componentDidMount() {
+        if (localStorage.getItem('first_login') === 'true') {
+            this.firstLogin = true;
+            localStorage.setItem('first_login', false);
+        }
+
         this.fetchAll();
     }
 
@@ -171,7 +176,7 @@ class App extends Component {
 
     transformMy = my => {
         let checkin = my.daily_reward;
-        if (checkin === true && localStorage.getItem('first_login') === 'true') {
+        if (checkin === true && this.firstLogin === true) {
             checkin = false;
         }
 

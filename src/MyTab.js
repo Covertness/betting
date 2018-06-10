@@ -49,6 +49,12 @@ const styles = {
         height: 25,
         margin: 5
     },
+    teamChooser: {
+        fontSize: 5,
+        padding: '3px 3px',
+        minWidth: 20,
+        minHeight: 30
+    },
     number: {
         minWidth: 10
     },
