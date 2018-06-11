@@ -12,6 +12,7 @@ class App extends Component {
         super(props);
         this.state = {
             userInfo: {
+                money: 0,
                 checkin: false
             },
             banners: [],

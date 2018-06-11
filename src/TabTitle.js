@@ -26,6 +26,8 @@ const styles = {
     },
     button: {
         position: 'absolute',
+        backgroundColor: 'Transparent',
+        border: 'none',
         right: 5
     }
 };

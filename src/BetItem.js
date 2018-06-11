@@ -213,7 +213,7 @@ class BetItem extends React.Component {
                 </div>
                 <div className={classes.rewardInfo}>
                     <img className={classes.moneyIcon} src="img/money.png" alt="money" />
-                    <label>{'猜对可赢 '}<b style={{ color: 'red' }}>{(money || 0) * odds[currentOddsIndex]}</b>{' 金币'}</label>
+                    <label>{'猜对可赢 '}<b style={{ color: 'red' }}>{parseInt((money || 0) * odds[currentOddsIndex], 10)}</b>{' 金币'}</label>
                 </div>
                 <div className={classes.bet}>
                     <TextField

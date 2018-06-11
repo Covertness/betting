@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>管理界面</title>
+	<style type="text/css">
+	#result {
+		margin-top: 20px;
+		border-style: solid;
+		border-width: 2px;
+		border-color: grey;
+	}
+</style>
+</head>
+<body>
+	<form onsubmit="return false;">
+		操作：<br>
+		<select id="op" onchange="changeContent()">
+			<option value="schedule">更新赛程</option>
+			<option value="tips">更新 Tips</option>
+		</select>
+		<br>
+		内容：<br>
+		<textarea id="content" name="content" cols="100" rows="20"></textarea>
+		<br><br>
+		<input type="submit" value="Submit" onclick="request()">
+		<div id="result"></div>
+	</form>
+	<script type="text/javascript">
+		var server = "http://mockbin.com";
+		var option = document.getElementById("op");
+		var content = document.getElementById("content");
+
+		var templates = {
+			schedule: {
+				"schedule_id": 5,
+				"home_team": "法国",
+				"away_team": "澳大利亚",
+				"home_team_win_odds": 1.233,
+				"away_team_win_odds": 2.345,
+				"tied_odds": 2.345,
+				"schedule_time": "2018-06-16 18:00:00",
+				"schedule_group": "C",
+				"schedule_type": 0,
+				"schedule_status": 0,
+				"disable_betting": true
+			},
+			tips: {
+				"tips": [
+				{
+					"tips_id": 0,
+					"content": "每天领取奖励 50 个金币",
+					"enable_display": true
+				},
+				{
+					"tips_id": 1,
+					"content": "重要通知",
+					"enable_display": true
+				},
+				{
+					"tips_id": 2,
+					"content": "游戏规则",
+					"enable_display": true
+				}
+				]
+			}
+		};
+		content.value = JSON.stringify(templates['schedule'], null, 2);
+
+		function changeContent() {
+			var currentOp = option.options[option.selectedIndex].value;
+
+			switch(currentOp) {
+				case 'schedule': {
+					content.value = JSON.stringify(templates['schedule'], null, 2);
+					break;
+				};
+				case 'tips': {
+					content.value = JSON.stringify(templates['tips'], null, 2);
+					break;
+				};
+				default: {
+					break;
+				}
+			}
+		}
+
+		function request() {
+			var reqContent = content.value;
+			var currentOp = option.options[option.selectedIndex].value;
+
+			var xmlhttp = new XMLHttpRequest();
+
+			if (currentOp === 'schedule') {
+				xmlhttp.open("POST", server + "/update_schedule");
+			} else if (currentOp === 'tips') {
+				xmlhttp.open("POST", server + "/add_tips");
+			}
+
+			xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+			xmlhttp.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+					document.getElementById("result").innerHTML = xmlhttp.responseText;
+				} else {
+					document.getElementById("result").innerHTML = 'requset error';
+				}
+			};
+
+			xmlhttp.send(reqContent);
+		}
+	</script>
+</body>
+</html>

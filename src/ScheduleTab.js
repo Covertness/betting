@@ -15,7 +15,7 @@ const styles = {
     }
 };
 
-class ScheduleTab extends React.Component {
+class ScheduleTab extends React.PureComponent {
     state = {
         groupIndex: 0,
     };

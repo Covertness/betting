@@ -64,7 +64,7 @@ const CustomTableCell = withStyles(theme => ({
     },
 }))(TableCell);
 
-class RankTab extends React.Component {
+class RankTab extends React.PureComponent {
     render() {
         const { classes, label, ranks, userInfo } = this.props;
 

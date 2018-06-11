@@ -25,6 +25,9 @@ const styles = {
         justifyContent: 'center',
         margin: 20,
         fontSize: 16
+    },
+    button: {
+        justifyContent: 'center'
     }
 }
 
@@ -43,8 +46,8 @@ function AlertDialog(props) {
                 <DialogContent>
                     <DialogContentText className={classes.content} id="alert-dialog-description">{children}</DialogContentText>
                 </DialogContent>
-                <DialogActions>
-                    <Button onClick={onClick} color="primary">{confirm}</Button>
+                <DialogActions className={classes.button}>
+                    <Button onClick={onClick} variant="raised" color="primary">{confirm}</Button>
                 </DialogActions>
             </Dialog>
         </div>

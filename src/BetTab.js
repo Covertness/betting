@@ -15,7 +15,7 @@ const styles = {
     }
 };
 
-class BetTab extends React.Component {
+class BetTab extends React.PureComponent {
     state = {
         groupIndex: 0,
     };

@@ -22,7 +22,8 @@ const styles = {
     },
     betting: {
         display: 'flex',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        alignItems: 'flex-end'
     },
     oddBetting: {},
     evenBetting: {
@@ -62,7 +63,6 @@ const styles = {
         minWidth: 60
     },
     winLabel: {
-        fontWeight: 'bold',
         color: '#cebf88'
     },
     checkinTitle: {
@@ -81,7 +81,7 @@ const styles = {
     }
 };
 
-class MyTab extends React.Component {
+class MyTab extends React.PureComponent {
     render() {
         const { classes, label, history } = this.props;
 
@@ -114,7 +114,7 @@ class MyTab extends React.Component {
                         </div>
                     </div>
                     <label className={win ? classes.winLabel : ''}>{notFinish ? '' : (win ? '赢' : '输')}</label>
-                    <label className={win ? classNames(classes.winLabel, classes.money) : classes.money}>{notFinish ? '' : (win ? ('+' + betting.money * betting.odds + '币') : '-' + betting.money + '币')}</label>
+                    <label className={win ? classNames(classes.winLabel, classes.money) : classes.money}>{notFinish ? '' : (win ? ('+' + parseInt(betting.money * betting.odds, 10) + '币') : '-' + betting.money + '币')}</label>
                 </ListItem>
             )
         });
