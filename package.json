@@ -1,7 +1,7 @@
 {
   "name": "betting",
   "version": "0.1.0",
-  "homepage": "http://covertness.github.io/betting",
+  "homepage": "https://covertness.github.io/betting",
   "dependencies": {
     "@material-ui/core": "^1.1.0",
     "@material-ui/icons": "^1.1.0",
