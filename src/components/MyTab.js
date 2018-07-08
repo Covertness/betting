@@ -4,7 +4,6 @@ import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import Button from '@material-ui/core/Button';
 import Avatar from '@material-ui/core/Avatar';
 import moment from 'moment';
 import TabTitle from './TabTitle';
@@ -22,8 +21,7 @@ const styles = {
     },
     betting: {
         display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'flex-end'
+        justifyContent: 'space-between'
     },
     oddBetting: {},
     evenBetting: {
@@ -31,7 +29,8 @@ const styles = {
     },
     bettingTeams: {
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        width: '15rem'
     },
     bettingTeamsInfo: {
         display: 'flex',
@@ -50,11 +49,9 @@ const styles = {
         height: 25,
         margin: 5
     },
-    teamChooser: {
-        fontSize: '0.8rem',
-        padding: '0.2rem 0.15rem',
-        minWidth: '0.5rem',
-        minHeight: '0.8rem'
+    teamChoosers: {
+        display: 'flex',
+        justifyContent: 'center'
     },
     number: {
         minWidth: 10
@@ -81,12 +78,14 @@ const styles = {
     }
 };
 
-class MyTab extends React.PureComponent {
+const resultLabels = ['主', '客', '平'];
+
+class MyTab extends React.Component {
     render() {
-        const { classes, label, history } = this.props;
+        const { classes, label, schedules, history } = this.props;
 
         const listBetting = history.betting.map((betting, index) => {
-            const { time, result, homeTeam, awayTeam, odds, groupTabIndex } = betting.schedule;
+            const { time, result, homeTeam, awayTeam, groupTabIndex } = schedules.find(s => s.id === betting.scheduleId);
             const notFinish = result == null;
             const win = result === betting.result;
 
@@ -102,15 +101,11 @@ class MyTab extends React.PureComponent {
                                 <label>VS</label>
                                 <Avatar className={classes.teamFlag} src={awayTeam.logo} />
                             </div>
+                            <label>{!notFinish && resultLabels[betting.result - 1]}</label>
                             <div style={{color: 'grey'}}>
                                 <label>{moment(time).format('MM月DD日')}</label>&nbsp;
                                 <label>{GroupTabs.index2lable(groupTabIndex)}</label>
                             </div>
-                        </div>
-                        <div>
-                            <Button className={classes.teamChooser} disableRipple size="small" variant="raised" color={betting.result === 1 ? "secondary" : "default"}>主胜({odds[0]})</Button>
-                            <Button className={classes.teamChooser} disableRipple size="small" variant="raised" color={betting.result === 3 ? "secondary" : "default"}>平局({odds[2]})</Button>
-                            <Button className={classes.teamChooser} disableRipple size="small" variant="raised" color={betting.result === 2 ? "secondary" : "default"}>客胜({odds[1]})</Button>
                         </div>
                     </div>
                     <label className={win ? classes.winLabel : ''}>{notFinish ? '' : (win ? '赢' : '输')}</label>

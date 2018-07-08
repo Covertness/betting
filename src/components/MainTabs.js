@@ -6,10 +6,10 @@ import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
-import RankTab from './RankTab';
-import BetTab from './BetTab';
-import ScheduleTab from './ScheduleTab';
-import MyTab from './MyTab';
+import RankTab from '../containers/MyRankTab';
+import BetTab from '../containers/BetTab';
+import ScheduleTab from '../containers/ScheduleTab';
+import MyTab from '../containers/MyHistoryTab';
 
 function TabContainer({ children, dir }) {
     return (
@@ -42,25 +42,20 @@ const styles = theme => ({
 
 class MainTabs extends React.Component {
     state = {
-        value: 0,
-        animateHeight: true
+        value: 0
     };
 
     handleChange = (event, value) => {
         window.scrollTo(0, 0);
-        this.setState({ value, animateHeight: true });
+        this.setState({ value });
     };
 
     handleChangeIndex = index => {
         this.setState({ value: index });
     };
 
-    handleSubTabChange = () => {
-        this.setState({ animateHeight: false });
-    }
-
     render() {
-        const { classes, theme, schedules, ranks, userInfo, history, onQuestionClick } = this.props;
+        const { classes, theme } = this.props;
 
         return (
             <div className={classes.root}>
@@ -69,12 +64,11 @@ class MainTabs extends React.Component {
                     axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
                     index={this.state.value}
                     onChangeIndex={this.handleChangeIndex}
-                    animateHeight={this.state.animateHeight}
                 >
-                    <TabContainer dir={theme.direction}><ScheduleTab label="赛程" schedules={schedules} onChangeIndex={this.handleSubTabChange} onQuestionClick={onQuestionClick} /></TabContainer>
-                    <TabContainer dir={theme.direction}><BetTab label="投注" schedules={schedules} userInfo={userInfo} onChangeIndex={this.handleSubTabChange} onBettingResult={this.props.onBettingResult} /></TabContainer>
-                    <TabContainer dir={theme.direction}><RankTab label="排名" ranks={ranks} userInfo={userInfo} /></TabContainer>
-                    <TabContainer dir={theme.direction}><MyTab label="投注记录" history={history} /></TabContainer>
+                    <TabContainer dir={theme.direction}><ScheduleTab label="赛程" /></TabContainer>
+                    <TabContainer dir={theme.direction}><BetTab label="投注" /></TabContainer>
+                    <TabContainer dir={theme.direction}><RankTab label="排名" /></TabContainer>
+                    <TabContainer dir={theme.direction}><MyTab label="投注记录" /></TabContainer>
                 </SwipeableViews>
                 <AppBar position="static" color="default" className={classes.tabLabels}>
                     <Tabs

@@ -49,7 +49,7 @@ const styles = {
         width: 15
     },
     myItem: {
-        backgroundColor: 'red'
+        backgroundColor: '#ededed'
     }
 };
 
@@ -64,7 +64,11 @@ const CustomTableCell = withStyles(theme => ({
     },
 }))(TableCell);
 
-class RankTab extends React.PureComponent {
+class RankTab extends React.Component {
+    componentDidMount() {
+        this.props.fetchRanks();
+    }
+
     render() {
         const { classes, label, ranks, userInfo } = this.props;
 
@@ -79,7 +83,7 @@ class RankTab extends React.PureComponent {
                     <div style={{margin: '15px 0 15px 0', width: 2, height: 50, backgroundColor: '#cebf88'}}></div> 
                     <div className={classes.myBetInfo}>
                         <label className={classes.myIncomeNumber}>
-                            {userInfo.income > 0 ? '+' + userInfo.income : userInfo.income}
+                            {userInfo.money}
                         </label>
                         <label className={classes.myBetPrompt}>我的金币</label>
                     </div>

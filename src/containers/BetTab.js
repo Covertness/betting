@@ -1,11 +1,12 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import GroupTabs from './GroupTabs';
+import GroupTabs from '../components/GroupTabs';
+import TabTitle from '../components/TabTitle';
 import BetItem from './BetItem';
-import TabTitle from './TabTitle';
 
 const styles = {
     root: {
@@ -15,18 +16,17 @@ const styles = {
     }
 };
 
-class BetTab extends React.PureComponent {
+class BetTab extends React.Component {
     state = {
         groupIndex: 0,
     };
 
     handleGroupChange = (groupIndex) => {
-        this.props.onChangeIndex();
         this.setState({ groupIndex });
     };
 
     render() {
-        const { classes, label, schedules, userInfo } = this.props;
+        const { classes, label, schedules } = this.props;
 
         const listBets = schedules.reduce((acc, schedule) => {
             if (!schedule.showBet) return acc;
@@ -34,7 +34,7 @@ class BetTab extends React.PureComponent {
 
             return acc.concat(
                 <ListItem key={schedule.id}>
-                    <BetItem userInfo={userInfo} schedule={schedule} showBettingLayout onBettingResult={this.props.onBettingResult} />
+                    <BetItem schedule={schedule} />
                 </ListItem>
             )
         }, []);
@@ -53,4 +53,22 @@ BetTab.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(BetTab);
+
+const mapStateToProps = ({ schedules, history }) => {
+    const bettingMap = {};
+    history.betting.forEach(betting => {
+        bettingMap[betting.scheduleId] = betting;
+    });
+
+    return {
+        schedules: schedules.map(schedule => {
+            if (bettingMap[schedule.id]) {
+                return Object.assign({ hasBetting: true }, schedule);
+            } else {
+                return schedule;
+            }
+        })
+    }
+}
+
+export default connect(mapStateToProps)(withStyles(styles)(BetTab));

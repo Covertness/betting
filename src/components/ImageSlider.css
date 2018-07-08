@@ -1,0 +1,103 @@
+.slider {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  padding-top: 27%;
+  overflow: hidden;
+  white-space: nowrap; }
+  .slider .slider-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    height: 100%;
+    width: 100%; }
+    .slider .slider-wrapper .slide {
+      display: inline-block;
+      height: 100%;
+      width: 100%; }
+  .slider .settings-icon {
+    cursor: pointer;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    z-index: 99999999999999;
+    background: white;
+    border-radius: 50%;
+    padding: 5px; }
+    .slider .settings-icon path, .slider .settings-icon polygon {
+      fill: black; }
+  .slider .settings {
+    background: rgba(0, 0, 0, 0.75);
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    z-index: 999999999;
+    display: flex;
+    align-items: center;
+    justify-content: center; }
+    .slider .settings .menu {
+      width: 600px;
+      height: 350px;
+      background: white; }
+      @media (max-width: 650px) {
+        .slider .settings .menu {
+          width: 300px; } }
+
+.right-arrow, .left-arrow {
+  height: 50px;
+  width: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f9f9f9;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform ease-in .1s; }
+  .right-arrow:hover, .left-arrow:hover {
+    transition: transform ease-in .1s;
+    transform: scale(1.1); }
+
+.cool-buttons {
+  background: black;
+  border: 2px solid white; }
+
+.right-arrow {
+  position: absolute;
+  top: 50%;
+  right: 25px;
+  z-index: 999;
+  color: #fff; }
+  .right-arrow img {
+    transform: translate(2px, 0); }
+    .right-arrow img:focus {
+      outline: 0; }
+
+.left-arrow {
+  position: absolute;
+  top: 50%;
+  left: 25px;
+  z-index: 999;
+  color: #fff; }
+  .left-arrow img {
+    transform: translate(-2px, 0); }
+    .left-arrow img:focus {
+      outline: 0; }
+
+.dots-container {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  z-index: 9999;
+  padding: 5px 0; }
+  .dots-container .dot {
+    background: #222;
+    display: inline-block;
+    padding: 10px;
+    margin-right: 5px;
+    cursor: pointer;
+    border-radius: 50%; }
+  .dots-container .active {
+    background: #fff; }

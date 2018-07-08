@@ -51,7 +51,7 @@ class GroupTabs extends React.Component {
     }
 
     static index2lable(index) {
-        switch(index) {
+        switch (index) {
             case 0: return "小组赛";
             case 1: return "8强赛";
             case 2: return "4强赛";

@@ -1,1 +1,22 @@
-[2, 1, 3, 0, 4]
+[{
+    "id": 2,
+    "nickName": "李四",
+    "avatarUrl": "//avatars3.githubusercontent.com/u/11582431?s=88&v=4",
+    "money": 100000,
+    "betCount": 20,
+    "winCount": 12
+}, {
+    "id": 1,
+    "nickName": "张三",
+    "avatarUrl": "//avatars3.githubusercontent.com/u/11582431?s=88&v=4",
+    "money": 50000,
+    "betCount": 2,
+    "winCount": 2
+}, {
+    "id": 3,
+    "nickName": "王二麻子",
+    "avatarUrl": "//avatars3.githubusercontent.com/u/11582431?s=88&v=4",
+    "money": 10000,
+    "betCount": 2,
+    "winCount": 1
+}]
